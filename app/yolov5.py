@@ -28,8 +28,7 @@ class yolov5():
                 self.kp_face = config['crowd_kp_face']
         self.num_classes = len(self.classes)
         self.inpHeight, self.inpWidth = 1280, 1280
-        anchors = [[19, 27, 44, 40, 38, 94], [96, 68, 86, 152, 180, 137], [140, 301, 303, 264, 238, 542],
-            [436, 615, 739, 380, 925, 792]]
+        anchors = [[19, 27, 44, 40, 38, 94], [96, 68, 86, 152, 180, 137], [140, 301, 303, 264, 238, 542],[436, 615, 739, 380, 925, 792]]
         self.stride = np.array([8., 16., 32., 64.])
         self.nl = len(anchors)
         self.na = len(anchors[0]) // 2
