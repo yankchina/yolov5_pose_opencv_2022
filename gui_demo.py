@@ -20,10 +20,9 @@ print(u"opencv-python version == {}".format(cv2.__version__))
 
 src_image = cv2.imread('./images/crowdpose_100024.jpg')
 
-# demo_detect(src_image,'kapao_s_coco.onnx')
+demo_detect(src_image,'kapao_s_coco.onnx')
 # demo_detect(src_image,'kapao_l_coco.onnx')
 # demo_detect(src_image,'kapao_m_coco.onnx')
 # demo_detect(src_image,'kapao_s_crowdpose.onnx')
 # demo_detect(src_image,'kapao_l_crowdpose.onnx')
 # demo_detect(src_image,'kapao_m_crowdpose.onnx')
-demo_detect(src_image,'yolov5-stick-best-200-2022-08-10.onnx')
