@@ -11,6 +11,7 @@ def demo_detect(source_image,weight_name):
     net = yolov5(u"weights/{}".format(weight_name))
     load_time = time.time() - start_time
     result_image = net.detect(source_image)
+    print(net.poses) # print the pose of each image
     detect_time = time.time() - start_time - load_time
     cv2.imwrite('./images/{}_result.jpg'.format(weight_name), result_image)
     print(u"{0} load time: {1:.2f}s, detect time: {2:.2f}s".format(weight_name, load_time, detect_time))

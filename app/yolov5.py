@@ -39,6 +39,7 @@ class yolov5():
         self.net = cv2.dnn.readNet(modelpath)
         self._inputNames = ''
         self.last_ind = 5 + self.num_classes
+        self.poses = []
 
     def resize_image(self, srcimg, keep_ratio=True, dynamic=False):
         top, left, newh, neww = 0, 0, self.inpWidth, self.inpHeight
@@ -116,12 +117,11 @@ class yolov5():
 
         # Perform non maximum suppression to eliminate redundant overlapping boxes with
         # lower confidences.
-        person_indices = cv2.dnn.NMSBoxes(person_boxes, person_confidences, config['person_conf_thres'],
-                                          config['person_iou_thres']).flatten()
-        kp_indices = cv2.dnn.NMSBoxes(kp_boxes, kp_confidences, config['kp_conf_thres'],
-                                      config['kp_iou_thres']).flatten()
+        person_indices = cv2.dnn.NMSBoxes(person_boxes, person_confidences, config['person_conf_thres'],config['person_iou_thres']).flatten()
+        kp_indices = cv2.dnn.NMSBoxes(kp_boxes, kp_confidences, config['kp_conf_thres'],config['kp_iou_thres']).flatten()
 
         poses = []
+        self.poses = poses 
         for i in person_indices:
             if person_confidences[i] > config['conf_thres_kp_person']:
                 pose = outs[person_rowinds[i], self.last_ind:].reshape((-1, 2))
@@ -148,8 +148,7 @@ class yolov5():
             top = box[1]
             width = box[2]
             height = box[3]
-            frame = self.drawPred(frame, person_classIds[i], person_confidences[i], left, top, left + width,
-                                  top + height)
+            frame = self.drawPred(frame, person_classIds[i], person_confidences[i], left, top, left + width,top + height)
 
         for pose in poses:
             for seg in self.lines.values():
@@ -159,16 +158,8 @@ class yolov5():
             for x, y, c in pose:
                 if c > 0:
                     cv2.circle(frame, (int(x), int(y)), 1, (0, 0, 255), 1)
-
-            #for x, y, c in pose[self.kp_face]:
-                #cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 255), 1)
-        # for i in kp_indices:
-        #     box = kp_boxes[i]
-        #     left = box[0]
-        #     top = box[1]
-        #     width = box[2]
-        #     height = box[3]
-        #     frame = self.drawPred(frame, kp_classIds[i], kp_confidences[i], left, top, left + width, top + height)
+                    
+        self.poses = poses # Expose poses for debugging
         return frame
 
     def drawPred(self, frame, classId, conf, left, top, right, bottom):
