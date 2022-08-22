@@ -38,6 +38,7 @@ class yolov5():
         self._inputNames = ''
         self.last_ind = 5 + self.num_classes
         self.poses = []
+        self.boxes = []
 
     def resize_image(self, srcimg, keep_ratio=True, dynamic=False):
         top, left, newh, neww = 0, 0, self.inpWidth, self.inpHeight
@@ -120,6 +121,7 @@ class yolov5():
 
         poses = []
         self.poses = poses 
+        self.boxes = []
         for i in person_indices:
             if person_confidences[i] > config['conf_thres_kp_person']:
                 pose = outs[person_rowinds[i], self.last_ind:].reshape((-1, 2))
@@ -147,6 +149,7 @@ class yolov5():
             width = box[2]
             height = box[3]
             frame = self.drawPred(frame, person_classIds[i], person_confidences[i], left, top, left + width,top + height)
+            self.boxes.append([person_confidences[i],left, top, width, height])
 
         for pose in poses:
             for seg in self.lines.values():
